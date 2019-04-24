@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:barcode_scan/barcode_scan.dart';
 
 class ScanDisplay extends StatefulWidget {
   @override
@@ -46,9 +47,7 @@ class _ScanState extends State<ScanDisplay> {
   }
 
   Future scan() async{
-    //camera access
-    //set state to barcode scan state
-    //wait for a scan
-    //if scan detected, return display, if not throw fault
+      String barcode = await BarcodeScanner.scan();
+      setState(() => this.barcode = barcode);
   }
 }
