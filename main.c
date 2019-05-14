@@ -6,11 +6,10 @@
  */ 
 
 #include <avr/io.h>
-#include <avr/interrupt.h>
 #include "io.c"
-#include "USART.h"
+#include "Senior_USART.h"
+#include "Senior_USART.c"
 #include <math.h>
-#include <string.h>
 #include <stdlib.h>
 
 volatile unsigned char TimerFlag = 0; //TimerISR() sets this to 1. c programmer should clear to 0
@@ -80,7 +79,8 @@ void TimerSet(unsigned long M)
 int counter=0;
 char counter_test = 0;
 unsigned int temp_counter=0;
-char lidarVar[200];
+char* lidarVar;
+char b = 1;
 int HexToDec= 0;
 char buffer[200];
 char buffered_string[200];
@@ -101,63 +101,91 @@ void LIDAR_Tick()
 		break;
 
 		case L_Wait:
-			if(wait_counter < 0)
-			{
-				wait_counter++;
-			}
-			else
-			{
-				if(USART_HasReceived(0))
+			//if(wait_counter < 0)
+			//{
+			//	wait_counter++;
+			//}
+			//else
+			//{
+				if(USART_hasLine(0))
 				{
-					if(counter_test <= 9)
+					lidarVar = USART_getLine(0);
+
+					if(counter_test > 50)
 					{
-						lidarVar[counter_test] = USART_Receive(0);
-						counter_test++;
+						for(int i=0; i < 9; i++)
+						{
+							itoa(lidarVar[i], buffer, 16);
+							strcat(buffered_string, buffer);
+							
+						}
+						
+						if(print_flag == 0)
+						{
+							LCD_DisplayString(1, buffered_string);
+							print_flag = 1;
+						}
+
+						counter_test=0;
 					}
 					else
 					{
-						if(print_flag == 0)
-						{
-							counter_test = 0;
-							print_flag = 1;
-							for(int i=0; i<9; i++)
-							{
-								itoa(lidarVar[i], buffer, 16);
-								strcat(buffered_string, buffer);
-								
-							}
-						}
+						counter_test++;
+					}
+					
+					if(counter>=2)
+					{
+						PORTB=0x01;
+						counter=0;
+					}
+					else
+					{
+						PORTB=0x02;
+						counter++;
 					}
 				}
-						
-			}
+				
+// 				if(USART_HasReceived(0))
+// 				{
+// 					if(counter_test <= 9)
+// 					{
+// 						lidarVar[counter_test] = USART_Receive(0);
+// 						counter_test++;
+// 					}
+// 					else
+// 					{
+// 						if(print_flag == 0)
+// 						{
+// 							counter_test = 0;
+// 							print_flag = 1;
+// 							for(int i=0; i<9; i++)
+// 							{
+// 								itoa(lidarVar[i], buffer, 16);
+// 								strcat(buffered_string, buffer);
+// 								
+// 							}
+// 						}
+// 					}
+// 				}
+// 						
+// 			//}
 
 			
+// 
+// 			if(temp_counter >= 100)
+// 			{
+// 				LCD_DisplayString(1, buffered_string);
+// 				//memset(buffered_string,'\0',200);
+// 				//itoa(lidarVar, buffer, 16);
+// 				//LCD_DisplayString(1, buffer);
+// 				temp_counter=0;
+// 			}
+// 			else
+// 			{
+// 				temp_counter++;
+// 				
+// 			}
 
-			if(temp_counter >= 100)
-			{
-				LCD_DisplayString(1, buffered_string);
-				//memset(buffered_string,'\0',200);
-				//itoa(lidarVar, buffer, 16);
-				//LCD_DisplayString(1, buffer);
-				temp_counter=0;
-			}
-			else
-			{
-				temp_counter++;
-				
-			}
-
-			if(counter>=2)
-			{
-				PORTB=0x01;
-				counter=0;
-			}
-			else
-			{
-				PORTB=0x02;
-				counter++;
-			}
 			//USART_Flush(0);
 		L_State = L_Wait;
 		break;
@@ -170,7 +198,7 @@ void LIDAR_Tick()
 }
 
 
-
+char config_LID[] = {0x42, 0x57, 0x02, 0x00, 0x00, 0x00, 0x01, 0x06};
 
 int main(void)
 {
@@ -178,12 +206,18 @@ int main(void)
 	DDRD = 0xFE; PORTD = 0x01; //PORTD port0 set to input for USART RDXO, ports1-7 set to output for use with lcd screen
 	DDRC = 0xFF; PORTC = 0x00; //PORTC set for lcd screen
 	
-	initUSART(0);
-	USART_Flush(0);
+	USART_initBaud(0, 115200);
+	
 	TimerSet(1);
 	TimerOn();
 	LCD_init();
-	LCD_DisplayString(1, "test2");
+	//for loop to configure the settings on the lidar
+	for(int i=0; i < 8; i++)
+	{
+		USART_Send(config_LID[i], 0);
+	}
+	USART_autoRecieve(b, 0);
+	//LCD_DisplayString(1, "test2");
 
     /* Replace with your application code */
     while (1) 
