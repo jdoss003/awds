@@ -16,6 +16,7 @@
 
 _system_state system_state;
 
+GCode command;
 char* nextLine;
 
 void waitingLoop(unsigned char delay)
@@ -61,49 +62,25 @@ void mainLoop()
     switch (system_state)
     {
         case SYS_START:
-            system_state = SYS_WAITING;
+            system_state = SYS_RUNNING;
 			break;
-        case SYS_WAITING:
-        {
-            if (USART_hasLine(0))
-            {
-				 nextLine = USART_getLine(0);
-                
-                /*if (command.parseAscii(nextLine, 1))
-                {
-					//USART_clearBuf(0);
-                    proccess_command(command);
-                    if (command.hasN())
-                    {
-                        setSystemPrinting(1);
-                    }
-                }*/
-                return;
-            }
-            //waitingLoop(0);
-            break;
-        }
         case SYS_RUNNING:
         {
             if (USART_hasLine(0))
             {
                 nextLine = USART_getLine(0);
-                /*if (command.parseAscii(nextLine, 1))
+                if (command.parseAscii(nextLine, 1))
                 {
-                    LCDMainScreen::setMessage(nextLine);
                     proccess_command(command);
                 }
                 else
                 {
-                    //USART_clearBuf(0);
+                    while (!USART_hasTransmittedLine(0));
                     char msg[] = "rs       \n";
                     utoa(GCode::getLineNum(), msg + 3, 10);
-                    LCDMainScreen::setMessage(msg);
                     USART_sendLine(msg, 0);
-                    while (!USART_hasTransmittedLine(0));
-                }*/
+                }
             }
-            //waitingLoop(0);
             break;
         }
         default:
@@ -119,7 +96,7 @@ int main()
     system_state = SYS_START;
     INITADC();
 
-    initMovScheduler();
+    initComScheduler();
 
     unsigned char i;
     for (i = 0; i < 4; ++i)
@@ -136,7 +113,7 @@ int main()
 
     USART_init(0);
 	USART_clearBuf(0);
-    USART_autoRecieve(1, 0);
+    USART_autoReceive(1, 0);
 
     while (1) { mainLoop(); }
 }

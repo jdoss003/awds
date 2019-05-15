@@ -13,7 +13,24 @@
 
 #include "gcode.h"
 
-void initMovScheduler();
+typedef struct ScheduledMove
+{
+    signed short x_steps;
+    unsigned short x_peroid;
+    signed short y_steps;
+    unsigned short y_peroid;
+    signed short z_steps;
+    unsigned short z_peroid;
+} _scheduledMove;
+
+typedef struct pos
+{
+    float x_pos;
+    float y_pos;
+    float z_pos;
+} _pos;
+
+void initComScheduler();
 void proccess_command(GCode);
 
 #endif //COMMANDS_H

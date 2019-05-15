@@ -10,12 +10,12 @@ extern "C" {
 void USART_init(unsigned char usartNum);
 void USART_initBaud(unsigned char usartNum, unsigned short baudRate);
 
-void USART_autoRecieve(unsigned char b, unsigned char usartNum);
+void USART_autoReceive(unsigned char b, unsigned char usartNum);
 unsigned char USART_hasLine(unsigned char usartNum);
 char* USART_getLine(unsigned char usartNum);
 void USART_clearBuf(unsigned char usartNum);
 
-void USART_sendLine(char* l, unsigned char usartNum);
+void USART_sendLine(const char* l, unsigned char usartNum);
 unsigned char USART_hasTransmittedLine(unsigned char usartNum);
 
 #ifdef __cplusplus
