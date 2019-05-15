@@ -1,15 +1,18 @@
 #include <avr/interrupt.h>
+#include <stdlib.h>
 #include "string.h"
+#include "io.h"
+
 
 #ifndef F_CPU
-#define F_CPU 8000000UL // Assume uC operates at 8MHz
+#define F_CPU 20000000UL // Assume uC operates at 20MHz
 #endif
 
 #ifndef BAUD_RATE
 #define BAUD_RATE 9600
 #endif
 
-#define BAUD_PRESCALE(br) (((F_CPU / (br * 16UL))) - 1)
+#define BAUD_PRESCALE(br) (((F_CPU / (br * 16UL))))
 #define MAX_BUF 80
 #define MAX_BUFS 5
 
@@ -32,8 +35,8 @@ void USART_initBaud(unsigned char usartNum, unsigned short baudRate)
     if (usartNum != 1) {
         UCSR0B |= (1 << RXEN0)  | (1 << TXEN0);            // Turn on receiver and transmitter
         UCSR0C |= (1 << UCSZ00) | (1 << UCSZ01);            // Use 8-bit character sizes
-        UBRR0L = BAUD_PRESCALE(baudRate);
-        UBRR0H = (BAUD_PRESCALE(baudRate) >> 8);
+        UBRR0L = 10;
+        UBRR0H = 0;
     }
     else {
         UCSR1B |= (1 << RXEN1)  | (1 << TXEN1);            // Turn on receiver and transmitter
@@ -152,21 +155,47 @@ ISR(USART0_UDRE_vect)
 ISR(USART0_RX_vect)
 {
     char c = UDR0;
-	if (index0[curBufWrite0] == 9)
+	if (index0[curBufWrite0] < 0)
 	{
-		readBuf0[curBufWrite0][index0[curBufWrite0]++] = c;
-		readBuf0[curBufWrite0][index0[curBufWrite0]] = 0;
-		curBufWrite0 = (curBufWrite0 + 1) % MAX_BUFS;
-		memset(&readBuf0[curBufWrite0][0], 0, MAX_BUF);
-		index0[curBufWrite0] = 0;
-	}
-	else
-	{
-		readBuf0[curBufWrite0][index0[curBufWrite0]++] = c;
-		if (index0[curBufWrite0] == MAX_BUF)
+		char test = (curBufWrite0 + 1) % MAX_BUFS;
+		if (test != curBufRead0)
 		{
+			curBufWrite0 = test;
 			memset(&readBuf0[curBufWrite0][0], 0, MAX_BUF);
 			index0[curBufWrite0] = 0;
+		}
+	}
+	if (index0[curBufWrite0] >= 0)
+	{
+		if((index0[curBufWrite0] == 0 || index0[curBufWrite0] == 1) && c != 0x59)
+		{
+			index0[curBufWrite0] = 0;
+		}
+		else if (index0[curBufWrite0] == 9)
+		{
+			readBuf0[curBufWrite0][index0[curBufWrite0]++] = c;
+			readBuf0[curBufWrite0][index0[curBufWrite0]] = 0;
+			char test = (curBufWrite0 + 1) % MAX_BUFS;
+			if (test != curBufRead0)
+			{
+				curBufWrite0 = test;
+				memset(&readBuf0[curBufWrite0][0], 0, MAX_BUF);
+				index0[curBufWrite0] = 0;
+			}
+			else
+			{
+				index0[curBufWrite0] = -1;
+			}
+		}
+		else
+		{
+			readBuf0[curBufWrite0][index0[curBufWrite0]++] = c;
+			if (index0[curBufWrite0] == MAX_BUF)
+			{
+				memset(&readBuf0[curBufWrite0][0], 0, MAX_BUF);
+				index0[curBufWrite0] = 0;
+			}
+			//PORTB=0x01;
 		}
 	}
 }
@@ -209,5 +238,22 @@ void USART_Send(unsigned char sendMe, unsigned char usartNum)
 	else {
 		while( !(UCSR1A & (1 << UDRE1)) );
 		UDR1 = sendMe;
+	}
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// **** WARNING: THIS FUNCTION BLOCKS MULTI-TASKING; USE WITH CAUTION!!! ****
+//Functionality - receives an 8-bit char value
+//Parameter: usartNum specifies which USART is waiting to receive data
+//Returns: Unsigned char data from the receive buffer
+unsigned char USART_Receive(unsigned char usartNum)
+{
+	if (usartNum != 1) {
+		while ( !(UCSR0A & (1 << RXC0)) ); // Wait for data to be received
+		return UDR0; // Get and return received data from buffer
+	}
+	else {
+		while ( !(UCSR1A & (1 << RXC1)) );
+		return UDR1;
 	}
 }
