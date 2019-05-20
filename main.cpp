@@ -19,6 +19,16 @@ _system_state system_state;
 GCode command;
 char* nextLine;
 
+void* operator new(size_t objsize)
+{
+	return malloc(objsize);
+}
+
+void operator delete(void* obj)
+{
+	free(obj);
+}
+
 void waitingLoop(unsigned char delay)
 {
     switch (system_state)
@@ -99,7 +109,7 @@ int main()
     initComScheduler();
 
     unsigned char i;
-    for (i = 0; i < 4; ++i)
+    for (i = 0; i < 3; ++i)
     {
         MovController::getMovController((_axis) i)->init((_axis) i);
     }
