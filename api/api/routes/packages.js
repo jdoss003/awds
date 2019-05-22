@@ -34,9 +34,7 @@ router.post('/', (req, res, next) => {
         details: req.body.details
     });
 
-    package
-        .save()
-        .then(result => {
+    package.save().then(result => {
         res.send(result);
         })
         .catch(err => res.send(err));
