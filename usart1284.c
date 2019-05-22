@@ -55,7 +55,7 @@ inline unsigned char USART_hasTransmittedLine(unsigned char usartNum)
 	return !usartNum ? !bit_is_set(UCSR0B, UDRIE0) : !bit_is_set(UCSR1B, UDRIE1);
 }
 
-void USART_autoRecieve(unsigned char b, unsigned char usartNum)
+void USART_autoReceive(unsigned char b, unsigned char usartNum)
 {
     if (!usartNum)
     {
@@ -121,7 +121,7 @@ void USART_clearBuf(unsigned char usartNum)
     }
 }
 
-inline void USART_sendLine(char* l, unsigned char usartNum)
+inline void USART_sendLine(const char* l, unsigned char usartNum)
 {
     if (!usartNum)
     {

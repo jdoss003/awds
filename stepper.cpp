@@ -21,7 +21,6 @@ Stepper* Stepper::getStepper(_axis axis)
 void Stepper::init(_axis axis)
 {
     this->axis = axis;
-    this->index = 0;
 
     switch (axis)
     {
@@ -81,15 +80,5 @@ void Stepper::step(unsigned char reverse)
         default:
             systemFailure("Stepper Out");
             break;
-    }
-
-    if (this->reversed == reverse)
-    {
-        ++this->index;
-        this->index = this->index % 4;
-    }
-    else
-    {
-        this->index = (this->index == 0 ? 3 : this->index - 1);
     }
 }
