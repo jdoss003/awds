@@ -24,7 +24,7 @@ void TimerOnA()
     // SO, 8 MHz clock or 8,000,000 /64 = 125,000 ticks/s
     // Thus, TCNT1 register will count at 125,000 ticks/s
     // AVR output compare register OCR1A.
-    OCR1A = 125;    // Timer interrupt will be generated when TCNT1==OCR1A
+    OCR1A = F_CPU / 64UL / 1000UL;    // Timer interrupt will be generated when TCNT1==OCR1A
     // We want a 1 ms tick. 0.001 s * 125,000 ticks/s = 125
     // So when TCNT1 register equals 125,
     // 1 ms has passed. Thus, we compare to 125.
@@ -74,7 +74,7 @@ void TimerOnB()
     // SO, 8 MHz clock or 8,000,000 /64 = 125,000 ticks/s
     // Thus, TCNT0 register will count at 125,000 ticks/s
     // AVR output compare register OCR0A.
-    OCR0A = 125;    // Timer interrupt will be generated when TCNT0==OCR0A
+    OCR0A = F_CPU / 64UL / 1000UL;    // Timer interrupt will be generated when TCNT0==OCR0A
     // We want a 1 ms tick. 0.001 s * 125,000 ticks/s = 125
     // So when TCNT0 register equals 125,
     // 1 ms has passed. Thus, we compare to 125.

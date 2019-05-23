@@ -11,7 +11,12 @@
 #define BAUD_RATE 9600
 #endif
 
-#define BAUD_PRESCALE(br) (((F_CPU / (br * 16UL))) - 1)
+/*
+ * The AVR manual gives us the equation F_CPU / 16 / buad_rate - 1.
+ * However, this can cause an off-by-one, so we use this instead.
+ *          (F_CPU / 16 / buad_rate + 0.5f) - 1
+ */
+#define BAUD_PRESCALE(br) ((short)(((float)(F_CPU / 16UL) / (float)br) - 0.5F))
 #define MAX_BUF 80
 #define MAX_BUFS 5
 
@@ -77,6 +82,7 @@ void USART_autoReceive(unsigned char b, unsigned char usartNum)
             }
         UCSR1B = b ? UCSR1B | (1 << RXCIE1) : UCSR1B & ~(1 << RXCIE1);
     }
+    sei();
 }
 
 inline unsigned char USART_hasLine(unsigned char usartNum)
@@ -133,6 +139,7 @@ inline void USART_sendLine(const char* l, unsigned char usartNum)
         out1 = l;
         UCSR1B |= (1  << UDRIE1);
     }
+    sei();
 }
 
 ISR(USART0_UDRE_vect)
