@@ -119,11 +119,23 @@ void USART_clearBuf(unsigned char usartNum)
 {
     if (!usartNum)
     {
-        // TODO USART 0
+        for (unsigned char i = 0; i < MAX_BUFS; ++i)
+        {
+            index0[i] = 0;
+            memset(&readBuf0[i][0], 0, MAX_BUF);
+        }
+        curBufWrite0 = 0;
+        curBufRead0 = 0;
     }
     else
     {
-        // TODO USART 1
+        for (unsigned char i = 0; i < MAX_BUFS; ++i)
+        {
+            index1[i] = 0;
+            memset(&readBuf1[i][0], 0, MAX_BUF);
+        }
+        curBufWrite1 = 0;
+        curBufRead1 = 0;
     }
 }
 
