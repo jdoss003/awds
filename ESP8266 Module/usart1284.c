@@ -1,6 +1,8 @@
 
 
 #include <avr/interrupt.h>
+#include <avr/io.h>
+#include "usart1284.h"
 #include "string.h"
 
 #ifndef F_CPU
@@ -11,7 +13,7 @@
 #define BAUD_RATE 9600
 #endif
 
-#define BAUD_PRESCALE(br) (((F_CPU / (br * 16UL))) - 1)
+#define BAUD_PRESCALE(br) (((F_CPU / (br * 16UL))))
 #define MAX_BUF 80
 #define MAX_BUFS 5
 
@@ -95,14 +97,14 @@ char* USART_getLine(unsigned char usartNum)
 {
     if (!usartNum)
     {
-        char* temp = &readBuf0[curBufRead0][0];
+        unsigned char* temp = &readBuf0[curBufRead0][0];
         index0[curBufRead0] = 0;
         curBufRead0 = (curBufRead0 + 1) % MAX_BUFS;
         return temp;
     }
     else
     {
-        char* temp = &readBuf1[curBufRead1][0];
+        unsigned char* temp = &readBuf1[curBufRead1][0];
         index1[curBufRead1] = 0;
         curBufRead1 = (curBufRead1 + 1) % MAX_BUFS;
         return temp;
@@ -111,18 +113,26 @@ char* USART_getLine(unsigned char usartNum)
 
 void USART_clearBuf(unsigned char usartNum)
 {
-    if (!usartNum)
-    {
-        memset(readBuf0, 0, MAX_BUF);
-		curBufRead0 = 0;
+	if (!usartNum)
+	{
+		for (unsigned char i = 0; i < MAX_BUFS; ++i)
+		{
+			index0[i] = 0;
+			memset(&readBuf0[i][0], 0, MAX_BUF);
+		}
 		curBufWrite0 = 0;
-    }
-    else
-    {
-        memset(readBuf1, 0, MAX_BUF);
-		curBufRead1 = 0;
+		curBufRead0 = 0;
+	}
+	else
+	{
+		for (unsigned char i = 0; i < MAX_BUFS; ++i)
+		{
+			index1[i] = 0;
+			memset(&readBuf1[i][0], 0, MAX_BUF);
+		}
 		curBufWrite1 = 0;
-    }
+		curBufRead1 = 0;
+	}
 }
 
 inline void USART_sendLine(char* l, unsigned char usartNum)
