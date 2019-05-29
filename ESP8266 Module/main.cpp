@@ -3,6 +3,8 @@
  *
  * Created: 5/15/2019 4:20:29 PM
  * Author : Derek
+ *
+ * To understand ESP8266 module please find it's data sheet and AT command sheet
  */ 
 
 #define F_CPU 20000000UL
@@ -98,7 +100,6 @@ bool Default_ReadResponse(char* expectedResponse)
 char* Connected_ReadResponse(char* expectedResponse)
 {
 	//Receive crlf
-
 	while(!USART_hasLine(USART_Channel)){}
 	USART_getLine(USART_Channel);
 	
@@ -115,7 +116,6 @@ char* Connected_ReadResponse(char* expectedResponse)
 	char* ok = USART_getLine(USART_Channel);
 	
 	//Check if received expected response
-	LCD_DisplayString(1, dispstr4);
 	if(strstr(ok, expectedResponse))
 	{
 		return status;
@@ -144,7 +144,7 @@ char* JoinAP_ReadResponse(char* connected, char* gotIP)
 	USART_getLine(USART_Channel);
 	
 	//Check if received expected response
-	if(strstr(status, connected) && strstr(status, gotIP))
+	if(strstr(status, connected) && strstr(ip, gotIP))
 	{
 		return status;
 	}
@@ -180,13 +180,33 @@ bool Start_ReadResponse(char* expectedResponse)
 
 char* JSON_ReadResponse(char* expectedResponse)
 {
-	//Receive crlf
+	//Receive received notice
 	while(!USART_hasLine(USART_Channel)){}
-	char* json = USART_getLine(USART_Channel);
-	PORTA = 0x01;
+	char* rec = USART_getLine(USART_Channel);
+	unsigned char* dispstr1 = (unsigned char*) rec;
+	PORTA =0x01;
+	
+	//Receive SEND OK
+	while(!USART_hasLine(USART_Channel)){}
+	char* sok = USART_getLine(USART_Channel);
+	unsigned char* dispstr2 = (unsigned char*) sok;
+	PORTA =0x02;
+	
+	//Receive JSON
+	while(!USART_hasLine(USART_Channel)){}
+	char* json1 = USART_getLine(USART_Channel);
+	unsigned char* dispstr3 = (unsigned char*) json1;
+	PORTA = 0x04;
+	
+	//Receive JSON
+	while(!USART_hasLine(USART_Channel)){}
+	char* json2 = USART_getLine(USART_Channel);
+	unsigned char* dispstr4 = (unsigned char*) json2;
+	PORTA = 0x04;
 	
 	//Check if received expected response
-	return json;
+	LCD_DisplayString(1, dispstr4);
+	return json2;
 }
 
 //Send AT command to ESP8622 WIFI Module.
@@ -290,7 +310,7 @@ char* ESP8266_Send(char* Data)
 {
 	char command[20];
 	memset(command, 0, 20);
-	sprintf(command, "AT+CIPSEND=%d\r\n", (strlen(Data)+2));
+	sprintf(command, "AT+CIPSEND=%d\r\n", (strlen(Data)));
 	command[19] = 0;
 	char* response1 = "OK";
 	SendAT(command);
@@ -304,7 +324,7 @@ char* ESP8266_Send(char* Data)
 	else
 	{
 		PORTA = 0x0C;
-		return "";
+		return "WHOOPS";
 	}
 }
 
@@ -345,29 +365,27 @@ int main(void)
 	
 	_delay_ms(1000);
 	
-	if(ESP8266_connected() == ESP8266_NOT_CONNECTED_TO_AP)
+	if (!ESP8266_connected() == ESP8266_NOT_CONNECTED_TO_AP)
 	{
-		_delay_ms(1000);
-		if(ESP8266_JoinAccessPoint() == ESP8266_WIFI_CONNECTED)
-		{
-			_delay_ms(1000);
-			if(ESP8266_Start(0, DOMAIN, PORT))
-			{
-				char* buffer = "GET /channels/780705/fields/1.json";
-				char* ans = ESP8266_Send(buffer);
-				PORTA = 0x0F;
-				unsigned char* json = (unsigned char*) ans;
-				LCD_DisplayString(1, json);
-			}
-			else
-			{
-				PORTA = 0x0C;
-			}
-		}
-		else
-		{
-			PORTA = 0x0C;
-		}
+		PORTA = 0x0C;
+		while(1){}
+	}
+	
+	_delay_ms(1000);
+	
+	if (!ESP8266_JoinAccessPoint() == ESP8266_WIFI_CONNECTED)
+	{
+		PORTA = 0x0C;
+		while(1){}
+	}
+	
+	_delay_ms(1000);
+		
+	if(ESP8266_Start(0, DOMAIN, PORT))
+	{
+		char* buffer = "GET /channels/780705/fields/1.json\r\n\r\n";
+		char* ans = ESP8266_Send(buffer);
+		PORTA = 0x0F;
 	}
 	else
 	{
