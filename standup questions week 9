@@ -1,0 +1,21 @@
+lidar sensor 
+-filter how do we think we are going to clear the buffer
+
+stop switches
+-is there overlap between the lidar sensor and the stop switches
+
+wifi modules
+-code issues with may be from executable type code?
+-jumble code ??
+-think the issue data is not being interpreted or that the
+data is being corrupted in transmission
+-maybe last ditch plan, try encoding the information in a different
+way
+-maybe the character standard is missmatched?
+
+QR Code
+-if the qr code doesnt work, have back up plan of hardcoding the g2 commands
+
+demonstration
+-send email to jeff about putting the framework in the lab on the 4th floor
+-video tape the project working in case we break anything
