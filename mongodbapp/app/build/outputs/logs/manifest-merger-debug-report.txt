@@ -1,0 +1,122 @@
+-- Merging decision tree log ---
+manifest
+ADDED from C:\Users\Benjamin\Desktop\official\mongodbapp\app\src\main\AndroidManifest.xml:2:1-21:12
+INJECTED from C:\Users\Benjamin\Desktop\official\mongodbapp\app\src\main\AndroidManifest.xml:2:1-21:12
+INJECTED from C:\Users\Benjamin\Desktop\official\mongodbapp\app\src\main\AndroidManifest.xml:2:1-21:12
+INJECTED from C:\Users\Benjamin\Desktop\official\mongodbapp\app\src\main\AndroidManifest.xml:2:1-21:12
+MERGED from [com.android.support:design:27.1.1] C:\Users\Benjamin\Desktop\gradle-5.4\caches\transforms-2\files-2.1\2fd4fdd46103d417873fae8808ecbc0b\AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:appcompat-v7:27.1.1] C:\Users\Benjamin\Desktop\gradle-5.4\caches\transforms-2\files-2.1\3a67c898f72eee5c79f7a5869bba8d68\AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support.constraint:constraint-layout:1.1.3] C:\Users\Benjamin\Desktop\gradle-5.4\caches\transforms-2\files-2.1\dfed866614fcbdf1a6fa290af1e7963c\AndroidManifest.xml:2:1-11:12
+MERGED from [com.android.support:recyclerview-v7:27.1.1] C:\Users\Benjamin\Desktop\gradle-5.4\caches\transforms-2\files-2.1\cebbb7beb0a89e34caea87f1eff4093e\AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:transition:27.1.1] C:\Users\Benjamin\Desktop\gradle-5.4\caches\transforms-2\files-2.1\fd68c10ce4324972ffecd8f1175d8457\AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:support-v4:27.1.1] C:\Users\Benjamin\Desktop\gradle-5.4\caches\transforms-2\files-2.1\9384e9b11eb2979f6155e938e53b3d69\AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:support-fragment:27.1.1] C:\Users\Benjamin\Desktop\gradle-5.4\caches\transforms-2\files-2.1\3240f01935f7fe50fc126ec699ac6808\AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:animated-vector-drawable:27.1.1] C:\Users\Benjamin\Desktop\gradle-5.4\caches\transforms-2\files-2.1\31ac50aaf497935833fd82eca32a7b93\AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:support-core-ui:27.1.1] C:\Users\Benjamin\Desktop\gradle-5.4\caches\transforms-2\files-2.1\df9fa518146b6a9598434b591a34a6ce\AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:support-core-utils:27.1.1] C:\Users\Benjamin\Desktop\gradle-5.4\caches\transforms-2\files-2.1\1eab275acda06a9c3a45ac20ef71af32\AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:support-vector-drawable:27.1.1] C:\Users\Benjamin\Desktop\gradle-5.4\caches\transforms-2\files-2.1\e24bc1683a92bdacc59b73386c186861\AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:support-media-compat:27.1.1] C:\Users\Benjamin\Desktop\gradle-5.4\caches\transforms-2\files-2.1\92a6161d9560bda4c15e892e8780c998\AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:support-compat:27.1.1] C:\Users\Benjamin\Desktop\gradle-5.4\caches\transforms-2\files-2.1\87b4d75f30d66c3c6553890e9996a2e3\AndroidManifest.xml:17:1-22:12
+MERGED from [android.arch.lifecycle:livedata-core:1.1.0] C:\Users\Benjamin\Desktop\gradle-5.4\caches\transforms-2\files-2.1\79c6ca5fbed38f0115637ea553469107\AndroidManifest.xml:17:1-22:12
+MERGED from [android.arch.lifecycle:viewmodel:1.1.0] C:\Users\Benjamin\Desktop\gradle-5.4\caches\transforms-2\files-2.1\ad3892fd3ce269d4515dfd4ad367a289\AndroidManifest.xml:17:1-22:12
+MERGED from [android.arch.lifecycle:runtime:1.1.0] C:\Users\Benjamin\Desktop\gradle-5.4\caches\transforms-2\files-2.1\1f5d723f47c70803824d67b2d16e6652\AndroidManifest.xml:17:1-22:12
+MERGED from [android.arch.core:runtime:1.1.0] C:\Users\Benjamin\Desktop\gradle-5.4\caches\transforms-2\files-2.1\eacb97a37cda39381a968f7be011f0fb\AndroidManifest.xml:17:1-22:12
+INJECTED from C:\Users\Benjamin\Desktop\official\mongodbapp\app\src\main\AndroidManifest.xml:2:1-21:12
+INJECTED from C:\Users\Benjamin\Desktop\official\mongodbapp\app\src\main\AndroidManifest.xml:2:1-21:12
+INJECTED from C:\Users\Benjamin\Desktop\official\mongodbapp\app\src\main\AndroidManifest.xml:2:1-21:12
+	package
+		ADDED from C:\Users\Benjamin\Desktop\official\mongodbapp\app\src\main\AndroidManifest.xml:3:5-37
+		INJECTED from C:\Users\Benjamin\Desktop\official\mongodbapp\app\src\main\AndroidManifest.xml
+		INJECTED from C:\Users\Benjamin\Desktop\official\mongodbapp\app\src\main\AndroidManifest.xml
+	android:versionName
+		INJECTED from C:\Users\Benjamin\Desktop\official\mongodbapp\app\src\main\AndroidManifest.xml
+		ADDED from C:\Users\Benjamin\Desktop\official\mongodbapp\app\src\main\AndroidManifest.xml:2:1-21:12
+		INJECTED from C:\Users\Benjamin\Desktop\official\mongodbapp\app\src\main\AndroidManifest.xml
+	android:versionCode
+		INJECTED from C:\Users\Benjamin\Desktop\official\mongodbapp\app\src\main\AndroidManifest.xml
+		ADDED from C:\Users\Benjamin\Desktop\official\mongodbapp\app\src\main\AndroidManifest.xml:2:1-21:12
+		INJECTED from C:\Users\Benjamin\Desktop\official\mongodbapp\app\src\main\AndroidManifest.xml
+	xmlns:android
+		ADDED from C:\Users\Benjamin\Desktop\official\mongodbapp\app\src\main\AndroidManifest.xml:2:11-69
+uses-permission#android.permission.INTERNET
+ADDED from C:\Users\Benjamin\Desktop\official\mongodbapp\app\src\main\AndroidManifest.xml:4:5-66
+	android:name
+		ADDED from C:\Users\Benjamin\Desktop\official\mongodbapp\app\src\main\AndroidManifest.xml:4:22-64
+application
+ADDED from C:\Users\Benjamin\Desktop\official\mongodbapp\app\src\main\AndroidManifest.xml:5:5-19:19
+MERGED from [com.android.support.constraint:constraint-layout:1.1.3] C:\Users\Benjamin\Desktop\gradle-5.4\caches\transforms-2\files-2.1\dfed866614fcbdf1a6fa290af1e7963c\AndroidManifest.xml:9:5-20
+MERGED from [com.android.support.constraint:constraint-layout:1.1.3] C:\Users\Benjamin\Desktop\gradle-5.4\caches\transforms-2\files-2.1\dfed866614fcbdf1a6fa290af1e7963c\AndroidManifest.xml:9:5-20
+	android:supportsRtl
+		ADDED from C:\Users\Benjamin\Desktop\official\mongodbapp\app\src\main\AndroidManifest.xml:10:9-35
+	android:label
+		ADDED from C:\Users\Benjamin\Desktop\official\mongodbapp\app\src\main\AndroidManifest.xml:8:9-41
+	android:roundIcon
+		ADDED from C:\Users\Benjamin\Desktop\official\mongodbapp\app\src\main\AndroidManifest.xml:9:9-54
+	android:icon
+		ADDED from C:\Users\Benjamin\Desktop\official\mongodbapp\app\src\main\AndroidManifest.xml:7:9-43
+	android:allowBackup
+		ADDED from C:\Users\Benjamin\Desktop\official\mongodbapp\app\src\main\AndroidManifest.xml:6:9-35
+	android:theme
+		ADDED from C:\Users\Benjamin\Desktop\official\mongodbapp\app\src\main\AndroidManifest.xml:11:9-40
+activity#com.example.mongodbapp.MainActivity
+ADDED from C:\Users\Benjamin\Desktop\official\mongodbapp\app\src\main\AndroidManifest.xml:12:9-18:20
+	android:name
+		ADDED from C:\Users\Benjamin\Desktop\official\mongodbapp\app\src\main\AndroidManifest.xml:12:19-47
+intent-filter#action:name:android.intent.action.MAIN+category:name:android.intent.category.LAUNCHER
+ADDED from C:\Users\Benjamin\Desktop\official\mongodbapp\app\src\main\AndroidManifest.xml:13:13-17:29
+action#android.intent.action.MAIN
+ADDED from C:\Users\Benjamin\Desktop\official\mongodbapp\app\src\main\AndroidManifest.xml:14:17-69
+	android:name
+		ADDED from C:\Users\Benjamin\Desktop\official\mongodbapp\app\src\main\AndroidManifest.xml:14:25-66
+category#android.intent.category.LAUNCHER
+ADDED from C:\Users\Benjamin\Desktop\official\mongodbapp\app\src\main\AndroidManifest.xml:16:17-77
+	android:name
+		ADDED from C:\Users\Benjamin\Desktop\official\mongodbapp\app\src\main\AndroidManifest.xml:16:27-74
+uses-sdk
+INJECTED from C:\Users\Benjamin\Desktop\official\mongodbapp\app\src\main\AndroidManifest.xml reason: use-sdk injection requested
+INJECTED from C:\Users\Benjamin\Desktop\official\mongodbapp\app\src\main\AndroidManifest.xml
+INJECTED from C:\Users\Benjamin\Desktop\official\mongodbapp\app\src\main\AndroidManifest.xml
+MERGED from [com.android.support:design:27.1.1] C:\Users\Benjamin\Desktop\gradle-5.4\caches\transforms-2\files-2.1\2fd4fdd46103d417873fae8808ecbc0b\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:design:27.1.1] C:\Users\Benjamin\Desktop\gradle-5.4\caches\transforms-2\files-2.1\2fd4fdd46103d417873fae8808ecbc0b\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:appcompat-v7:27.1.1] C:\Users\Benjamin\Desktop\gradle-5.4\caches\transforms-2\files-2.1\3a67c898f72eee5c79f7a5869bba8d68\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:appcompat-v7:27.1.1] C:\Users\Benjamin\Desktop\gradle-5.4\caches\transforms-2\files-2.1\3a67c898f72eee5c79f7a5869bba8d68\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support.constraint:constraint-layout:1.1.3] C:\Users\Benjamin\Desktop\gradle-5.4\caches\transforms-2\files-2.1\dfed866614fcbdf1a6fa290af1e7963c\AndroidManifest.xml:5:5-7:41
+MERGED from [com.android.support.constraint:constraint-layout:1.1.3] C:\Users\Benjamin\Desktop\gradle-5.4\caches\transforms-2\files-2.1\dfed866614fcbdf1a6fa290af1e7963c\AndroidManifest.xml:5:5-7:41
+MERGED from [com.android.support:recyclerview-v7:27.1.1] C:\Users\Benjamin\Desktop\gradle-5.4\caches\transforms-2\files-2.1\cebbb7beb0a89e34caea87f1eff4093e\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:recyclerview-v7:27.1.1] C:\Users\Benjamin\Desktop\gradle-5.4\caches\transforms-2\files-2.1\cebbb7beb0a89e34caea87f1eff4093e\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:transition:27.1.1] C:\Users\Benjamin\Desktop\gradle-5.4\caches\transforms-2\files-2.1\fd68c10ce4324972ffecd8f1175d8457\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:transition:27.1.1] C:\Users\Benjamin\Desktop\gradle-5.4\caches\transforms-2\files-2.1\fd68c10ce4324972ffecd8f1175d8457\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-v4:27.1.1] C:\Users\Benjamin\Desktop\gradle-5.4\caches\transforms-2\files-2.1\9384e9b11eb2979f6155e938e53b3d69\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-v4:27.1.1] C:\Users\Benjamin\Desktop\gradle-5.4\caches\transforms-2\files-2.1\9384e9b11eb2979f6155e938e53b3d69\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-fragment:27.1.1] C:\Users\Benjamin\Desktop\gradle-5.4\caches\transforms-2\files-2.1\3240f01935f7fe50fc126ec699ac6808\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-fragment:27.1.1] C:\Users\Benjamin\Desktop\gradle-5.4\caches\transforms-2\files-2.1\3240f01935f7fe50fc126ec699ac6808\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:animated-vector-drawable:27.1.1] C:\Users\Benjamin\Desktop\gradle-5.4\caches\transforms-2\files-2.1\31ac50aaf497935833fd82eca32a7b93\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:animated-vector-drawable:27.1.1] C:\Users\Benjamin\Desktop\gradle-5.4\caches\transforms-2\files-2.1\31ac50aaf497935833fd82eca32a7b93\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-core-ui:27.1.1] C:\Users\Benjamin\Desktop\gradle-5.4\caches\transforms-2\files-2.1\df9fa518146b6a9598434b591a34a6ce\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-core-ui:27.1.1] C:\Users\Benjamin\Desktop\gradle-5.4\caches\transforms-2\files-2.1\df9fa518146b6a9598434b591a34a6ce\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-core-utils:27.1.1] C:\Users\Benjamin\Desktop\gradle-5.4\caches\transforms-2\files-2.1\1eab275acda06a9c3a45ac20ef71af32\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-core-utils:27.1.1] C:\Users\Benjamin\Desktop\gradle-5.4\caches\transforms-2\files-2.1\1eab275acda06a9c3a45ac20ef71af32\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-vector-drawable:27.1.1] C:\Users\Benjamin\Desktop\gradle-5.4\caches\transforms-2\files-2.1\e24bc1683a92bdacc59b73386c186861\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-vector-drawable:27.1.1] C:\Users\Benjamin\Desktop\gradle-5.4\caches\transforms-2\files-2.1\e24bc1683a92bdacc59b73386c186861\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-media-compat:27.1.1] C:\Users\Benjamin\Desktop\gradle-5.4\caches\transforms-2\files-2.1\92a6161d9560bda4c15e892e8780c998\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-media-compat:27.1.1] C:\Users\Benjamin\Desktop\gradle-5.4\caches\transforms-2\files-2.1\92a6161d9560bda4c15e892e8780c998\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-compat:27.1.1] C:\Users\Benjamin\Desktop\gradle-5.4\caches\transforms-2\files-2.1\87b4d75f30d66c3c6553890e9996a2e3\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-compat:27.1.1] C:\Users\Benjamin\Desktop\gradle-5.4\caches\transforms-2\files-2.1\87b4d75f30d66c3c6553890e9996a2e3\AndroidManifest.xml:20:5-44
+MERGED from [android.arch.lifecycle:livedata-core:1.1.0] C:\Users\Benjamin\Desktop\gradle-5.4\caches\transforms-2\files-2.1\79c6ca5fbed38f0115637ea553469107\AndroidManifest.xml:20:5-44
+MERGED from [android.arch.lifecycle:livedata-core:1.1.0] C:\Users\Benjamin\Desktop\gradle-5.4\caches\transforms-2\files-2.1\79c6ca5fbed38f0115637ea553469107\AndroidManifest.xml:20:5-44
+MERGED from [android.arch.lifecycle:viewmodel:1.1.0] C:\Users\Benjamin\Desktop\gradle-5.4\caches\transforms-2\files-2.1\ad3892fd3ce269d4515dfd4ad367a289\AndroidManifest.xml:20:5-44
+MERGED from [android.arch.lifecycle:viewmodel:1.1.0] C:\Users\Benjamin\Desktop\gradle-5.4\caches\transforms-2\files-2.1\ad3892fd3ce269d4515dfd4ad367a289\AndroidManifest.xml:20:5-44
+MERGED from [android.arch.lifecycle:runtime:1.1.0] C:\Users\Benjamin\Desktop\gradle-5.4\caches\transforms-2\files-2.1\1f5d723f47c70803824d67b2d16e6652\AndroidManifest.xml:20:5-44
+MERGED from [android.arch.lifecycle:runtime:1.1.0] C:\Users\Benjamin\Desktop\gradle-5.4\caches\transforms-2\files-2.1\1f5d723f47c70803824d67b2d16e6652\AndroidManifest.xml:20:5-44
+MERGED from [android.arch.core:runtime:1.1.0] C:\Users\Benjamin\Desktop\gradle-5.4\caches\transforms-2\files-2.1\eacb97a37cda39381a968f7be011f0fb\AndroidManifest.xml:20:5-44
+MERGED from [android.arch.core:runtime:1.1.0] C:\Users\Benjamin\Desktop\gradle-5.4\caches\transforms-2\files-2.1\eacb97a37cda39381a968f7be011f0fb\AndroidManifest.xml:20:5-44
+INJECTED from C:\Users\Benjamin\Desktop\official\mongodbapp\app\src\main\AndroidManifest.xml
+INJECTED from C:\Users\Benjamin\Desktop\official\mongodbapp\app\src\main\AndroidManifest.xml
+	android:targetSdkVersion
+		INJECTED from C:\Users\Benjamin\Desktop\official\mongodbapp\app\src\main\AndroidManifest.xml
+		ADDED from C:\Users\Benjamin\Desktop\official\mongodbapp\app\src\main\AndroidManifest.xml
+		INJECTED from C:\Users\Benjamin\Desktop\official\mongodbapp\app\src\main\AndroidManifest.xml
+	android:minSdkVersion
+		INJECTED from C:\Users\Benjamin\Desktop\official\mongodbapp\app\src\main\AndroidManifest.xml
+		ADDED from C:\Users\Benjamin\Desktop\official\mongodbapp\app\src\main\AndroidManifest.xml
+		INJECTED from C:\Users\Benjamin\Desktop\official\mongodbapp\app\src\main\AndroidManifest.xml

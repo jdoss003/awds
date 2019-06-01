@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">mongodbappactivities</string>
+    <string name="post">POST</string>
+    <string name="get">GET</string>
+    <string name="send">SCAN</string>
+    <string name="awds_home">AWDS Home</string>
+    <string name="packageposting">Package Posting</string>
+</resources>
