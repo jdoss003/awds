@@ -4,9 +4,9 @@ const morgan = require('morgan');
 const bodyparser = require('body-parser');
 const mongoose = require('mongoose');
 
-
 //Define routes
 const packageRoutes = require('./api/routes/packages');
+const operationRoutes = require('./api/routes/operations');
 
 //Connect to database
 mongoose.connect('mongodb://localhost/awds', {useNewUrlParser: true})
@@ -20,6 +20,7 @@ app.use(bodyparser.json());
 
 //Routes
 app.use('/packages', packageRoutes);
+app.use('/operations', operationRoutes);
 
 //CORS handling
 app.use((req, res, next) => {

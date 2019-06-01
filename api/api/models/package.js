@@ -1,19 +1,23 @@
 const mongoose = require('mongoose');
 
-const packageSchema = mongoose.Schema({
-    packageID: {
+const Package = mongoose.Schema({
+    PACKAGE_ID: {
         type: String,
         unique: true,
         required: true,
     },
-    createdDate: {
+    DATE_ENTERED: {
         type: Date,
         default: Date.now,
     },
-    details: {
+    DETAILS: {
+        type: String,
+        required: true,
+    },
+    GCODE: {
         type: String,
         required: true,
     }
 });
 
-module.exports = mongoose.model('Package', packageSchema);
+module.exports = mongoose.model('Package', Package);

@@ -86,7 +86,10 @@ bool Default_ReadResponse(char* expectedResponse)
 	
 	//Receive OK
 	while(!USART_hasLine(USART_Channel)){}
-	char* ok = USART_getLine(USART_Channel);;
+	char* ok = USART_getLine(USART_Channel);
+	unsigned char* dispstr = (unsigned char*) ok;
+	
+	LCD_DisplayString(1, dispstr);
 	
 	//Check if received expected response
 	if(strstr(ok, expectedResponse))
@@ -114,6 +117,9 @@ char* Connected_ReadResponse(char* expectedResponse)
 	//Receive OK
 	while(!USART_hasLine(USART_Channel)){}
 	char* ok = USART_getLine(USART_Channel);
+	unsigned char* dispstr = (unsigned char*) ok;
+	
+	LCD_DisplayString(1, dispstr);
 	
 	//Check if received expected response
 	if(strstr(ok, expectedResponse))
@@ -143,6 +149,9 @@ char* JoinAP_ReadResponse(char* connected, char* gotIP)
 	while(!USART_hasLine(USART_Channel)){}
 	USART_getLine(USART_Channel);
 	
+	unsigned char* dispstr = (unsigned char*) status;
+	LCD_DisplayString(1, dispstr);
+	
 	//Check if received expected response
 	if(strstr(status, connected) && strstr(ip, gotIP))
 	{
@@ -169,6 +178,9 @@ bool Start_ReadResponse(char* expectedResponse)
 	//Receive OK
 	while(!USART_hasLine(USART_Channel)){}
 	char* ok = USART_getLine(USART_Channel);
+	unsigned char* dispstr = (unsigned char*) ok;
+	
+	LCD_DisplayString(1, dispstr);
 	
 	//Check if received expected response
 	if(strstr(ok, expectedResponse))
@@ -192,29 +204,36 @@ char* JSON_ReadResponse(char* expectedResponse)
 	unsigned char* dispstr2 = (unsigned char*) sok;
 	PORTA =0x02;
 	
-	//Receive JSON
+	//Receive JSON*/
 	while(!USART_hasLine(USART_Channel)){}
 	char* json1 = USART_getLine(USART_Channel);
 	unsigned char* dispstr3 = (unsigned char*) json1;
 	PORTA = 0x04;
+	LCD_DisplayString(1, dispstr3);
 	
 	//Receive JSON
-	while(!USART_hasLine(USART_Channel)){}
+	uint16_t count = 0;
+	while(!USART_hasLine(USART_Channel)){
+		if(count > 60000){
+			return json1;
+		}
+		count = count + 1;
+	}
 	char* json2 = USART_getLine(USART_Channel);
 	unsigned char* dispstr4 = (unsigned char*) json2;
-	PORTA = 0x04;
-	
+	PORTA = 0x08;
+
 	//Check if received expected response
-	LCD_DisplayString(1, dispstr4);
 	return json2;
 }
 
 //Send AT command to ESP8622 WIFI Module.
 void SendAT(char* atCommand)
-{	PORTA = 0x01;
+{	
+	PORTA = 0x01;
 	USART_clearBuf(USART_Channel);
 	USART_sendLine(atCommand, USART_Channel);		/* Send AT command to ESP8266 */
-	while(!USART_hasTransmittedLine(USART_Channel)){}
+	//while(!USART_hasTransmittedLine(USART_Channel)){}
 	PORTA= 0x00;
 }
 
@@ -317,14 +336,106 @@ char* ESP8266_Send(char* Data)
 	
 	if(Default_ReadResponse(response1))
 	{
+		_delay_ms(10);
 		char* response2 = "SEND OK";
 		SendAT(Data);
 		return JSON_ReadResponse(response2);
 	}
 	else
 	{
-		PORTA = 0x0C;
-		return "WHOOPS";
+		return "ERR";
+	}
+}
+
+bool WIFI_init(){
+		
+		sei();
+		
+		if (!ESP8266_WIFIMode())
+		{
+			return false;
+		}
+		
+		_delay_ms(10);
+		
+		if (!ESP8266_ConnectionMode())
+		{
+			return false;
+		}
+		
+		_delay_ms(10);
+		
+		if (!ESP8266_ApplicationMode())
+		{
+			return false;
+		}
+		
+		_delay_ms(10);
+		
+		if (!ESP8266_JoinAccessPoint() == ESP8266_WIFI_CONNECTED)
+		{
+			return false;
+		}
+		return true;
+}
+
+char* getOperation(){
+	char* httpReq = "GET /channels/780705/fields/1.json\r\n\r\n";
+	uint8_t val = ESP8266_connected();
+	_delay_ms(10);
+	
+	if(val == ESP8266_CONNECTED_TO_AP)
+	{
+		if(ESP8266_Start(0, DOMAIN, PORT))
+		{
+			_delay_ms(10);
+			char* ans = ESP8266_Send(httpReq);
+			return ans;
+		}
+		else
+		{
+			return "[]";
+		}
+	}
+	else if(val == ESP8266_CREATED_TRANSMISSION)
+	{
+		char* ans = ESP8266_Send(httpReq);
+		return ans;
+	}
+	else if(val == ESP8266_TRANSMISSION_DISCONNECTED)
+	{
+		if(ESP8266_Start(0, DOMAIN, PORT))
+		{
+			_delay_ms(10);
+			char* ans = ESP8266_Send(httpReq);
+			return ans;
+		}
+		else
+		{
+			return "[]";
+		}
+	}
+	else if(val == ESP8266_NOT_CONNECTED_TO_AP)
+	{
+		if (ESP8266_JoinAccessPoint() == ESP8266_WIFI_CONNECTED)
+		{
+			_delay_ms(10);
+			if(ESP8266_Start(0, DOMAIN, PORT))
+			{
+				_delay_ms(10);
+				char* ans = ESP8266_Send(httpReq);
+				return ans;
+			}
+			else
+			{
+				return "[]";
+			}
+		}
+		return "[]";
+	}
+	else
+	{
+		return "[]";
 	}
 }
 
@@ -334,64 +445,26 @@ int main(void)
 	DDRC = 0xFF; PORTC = 0x00; //LCD Data Bus
 	DDRD = 0xC0; PORTD = 0x00; //LCD Control Bus
 	
+	//Initialize Dependencies
 	_delay_ms(1000);
 	LCD_init();
 	USART_initBaud(USART_Channel, ESP8266_Baud);/* Initiate USART with 115200 baud rate */
-	USART_autoRecieve(1, USART_Channel); /* Initiate auto receiving of ESP8266 info*/
-	
-	sei();
-	
-	if (!ESP8266_WIFIMode())
-	{	
-		PORTA = 0x0C;
-		while(1){}
-	}
-	
+	USART_autoRecieve(1, USART_Channel); /* Initiate auto receiving of ESP8266 info*/		
 	_delay_ms(1000);
 	
-	if (!ESP8266_ConnectionMode())
+	//INIT WIFI
+	if(!WIFI_init())
 	{
-		PORTA = 0x0C;
-		while(1){}
-	}
-	
-	_delay_ms(1000);
-	
-	if (!ESP8266_ApplicationMode())
-	{
-		PORTA = 0x0C;
-		while(1){}
-	}
-	
-	_delay_ms(1000);
-	
-	if (!ESP8266_connected() == ESP8266_NOT_CONNECTED_TO_AP)
-	{
-		PORTA = 0x0C;
-		while(1){}
-	}
-	
-	_delay_ms(1000);
-	
-	if (!ESP8266_JoinAccessPoint() == ESP8266_WIFI_CONNECTED)
-	{
-		PORTA = 0x0C;
-		while(1){}
-	}
-	
-	_delay_ms(1000);
-		
-	if(ESP8266_Start(0, DOMAIN, PORT))
-	{
-		char* buffer = "GET /channels/780705/fields/1.json\r\n\r\n";
-		char* ans = ESP8266_Send(buffer);
-		PORTA = 0x0F;
+		unsigned char* op = (unsigned char*) "JA FAILED";
+		LCD_DisplayString(1, op);
 	}
 	else
 	{
-		PORTA = 0x0C;
+		char* operation = getOperation();
+		unsigned char* op1 = (unsigned char*) operation;
+		LCD_DisplayString(1, op1);
+		PORTA = 0x0F;
 	}
-
 	while(1){}
 }
 
