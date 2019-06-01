@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">mongodbapp</string>
+    <string name="scan_code">Scan Code</string>
+    <string name="button">Button</string>
+</resources>
