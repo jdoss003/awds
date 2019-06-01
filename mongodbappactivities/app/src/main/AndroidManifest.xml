@@ -13,7 +13,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".PostingOne"></activity>
+        <activity android:name=".PostingThree"></activity>
+        <activity android:name=".PostingTwo" />
+        <activity android:name=".PostingOne" />
         <activity android:name=".ScanCodeActivity" />
         <activity android:name=".send" />
         <activity android:name=".get" />

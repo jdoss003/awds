@@ -3,4 +3,5 @@
     <item
         name="toolbar"
         type="id"/>
+    <item name="package_one_btn" type="id" />
 </resources>
