@@ -175,7 +175,7 @@ int main(void)
 	DDRA = 0x00; PORTA = 0xFF; //input
 	DDRB = 0xFF; PORTB = 0x00; //output
 	DDRC = 0x00; PORTC = 0xFF; //input
-	TimerSet(1.5);
+	TimerSet(2);
 	TimerOn();
 	PWM_on();
 	//_delay_us(400);
