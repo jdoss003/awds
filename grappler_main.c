@@ -175,18 +175,46 @@ int main(void)
 	DDRA = 0x00; PORTA = 0xFF; //input
 	DDRB = 0xFF; PORTB = 0x00; //output
 	DDRC = 0x00; PORTC = 0xFF; //input
-	TimerSet(2);
+	TimerSet(1);
 	TimerOn();
 	PWM_on();
-	//_delay_us(400);
-	//set_PWM(95);
+	char test_button;
+	double pwmSetting = 0;
+	char close_flag = 0;
+	long cnt_test = 0;
     while (1) 
     {
+		test_button = ~PINA & 0x01;
+		if(test_button)
+		{
+				_delay_ms(20);
+				OCR3A = (short)(F_CPU / (128 * 50)) - 1;
+				_delay_ms(1.25);
+				OCR3A = 0;
 
-		_delay_us(400);
-		set_PWM(0);
-		//_delay_us(200);
-		//set_PWM(90);
+		}
+		else
+		{
+		_delay_ms(20);
+		OCR3A = (short)(F_CPU / (128 * 50)) - 1;
+		_delay_ms(1.9);
+		OCR3A = 0;
+		}
+// 			if(cnt_test > 20)
+// 			{
+// 				PORTB = 0x01;
+// 				set_PWM(65);
+// 				_delay_ms(1);
+// 				set_PWM(0);
+// 				cnt_test=0;
+// 				
+// 			}
+// 			else
+// 			{
+// 				//PORTB = 0x02;
+// 				cnt_test++;
+// 				//set_PWM(50);
+// 			}
 	//	grapplerTick();
 
 		while(!TimerFlag);
