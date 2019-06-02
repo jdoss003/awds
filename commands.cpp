@@ -17,6 +17,7 @@
 
 const char* OK = "ok\n";
 const char* BUSY = "busy\n";
+const char* DONE = "done\n";
 
 _task com_scheduler;
 
@@ -25,10 +26,16 @@ Command currentBlocking;
 
 void scheduleCom(_task *task)
 {
-    if (currentBlocking.isReady() && currentBlocking.getCommandType() != EMPTY)
+	if (currentBlocking.isReady() && currentBlocking.getCommandType() != EMPTY)
     {
         currentBlocking.start();
     }
+	else if (currentBlocking.hasStarted() && currentBlocking.isDone())
+	{
+		while (!USART_hasTransmittedLine(0));
+		USART_sendLine(DONE, 0);
+		currentBlocking.setCommandType(EMPTY);
+	}
 }
 
 void initComScheduler()
@@ -62,20 +69,38 @@ void do_g_command(GCode cmd)
                 if (!relPositioning)
                 {
                     if (cmd.hasX())
-                        mov->x_steps = ((cmd.getX() - MovController::getMovController(X_AXIS)->getPosition()) * MovController::getStepsPerMM(X_AXIS));
+                    {
+                        mov->x_steps = (long)((cmd.getX() - MovController::getMovController(X_AXIS)->getPosition()) * MovController::getStepsPerMM(X_AXIS));
+                        if (cmd.getX() < 0)
+                        {
+                            systemFailure("Neg position in abs positioning mode!");
+                        }
+                    }
                     if (cmd.hasY())
-                        mov->y_steps = ((cmd.getY() - MovController::getMovController(Y_AXIS)->getPosition()) * MovController::getStepsPerMM(Y_AXIS));
+                    {
+                        mov->y_steps = (long)((cmd.getY() - MovController::getMovController(Y_AXIS)->getPosition()) * MovController::getStepsPerMM(Y_AXIS));
+                        if (cmd.getY() < 0)
+                        {
+                            systemFailure("Neg position in abs positioning mode!");
+                        }
+                    }
                     if (cmd.hasZ())
-                        mov->z_steps = ((cmd.getZ() - MovController::getMovController(Z_AXIS)->getPosition()) * MovController::getStepsPerMM(Z_AXIS));
+                    {
+                        mov->z_steps = (long)((cmd.getZ() - MovController::getMovController(Z_AXIS)->getPosition()) * MovController::getStepsPerMM(Z_AXIS));
+                        if (cmd.getZ() < 0)
+                        {
+                            systemFailure("Neg position in abs positioning mode!");
+                        }
+                    }
                 }
                 else
                 {
                     if (cmd.hasX())
-                        mov->x_steps = (cmd.getX() * MovController::getStepsPerMM(X_AXIS));
+                        mov->x_steps = (long)(cmd.getX() * MovController::getStepsPerMM(X_AXIS));
                     if (cmd.hasY())
-                        mov->y_steps = (cmd.getY() * MovController::getStepsPerMM(Y_AXIS));
+                        mov->y_steps = (long)(cmd.getY() * MovController::getStepsPerMM(Y_AXIS));
                     if (cmd.hasZ())
-                        mov->z_steps = (cmd.getZ() * MovController::getStepsPerMM(Z_AXIS));
+                        mov->z_steps = (long)(cmd.getZ() * MovController::getStepsPerMM(Z_AXIS));
                 }
 
                 if (mov->x_steps >= mov->y_steps && mov->x_steps > mov->z_steps)
@@ -179,6 +204,10 @@ void do_g_command(GCode cmd)
             {
                 currentBlocking.setCommandType(SET_POS);
                 _pos* pos = currentBlocking.getPosData();
+
+                pos->x_pos = MovController::getMovController(X_AXIS)->getPosition();
+                pos->y_pos = MovController::getMovController(Y_AXIS)->getPosition();
+                pos->z_pos = MovController::getMovController(Z_AXIS)->getPosition();
 
                 if (cmd.hasX())
                     pos->x_pos = cmd.getX();

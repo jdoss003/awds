@@ -18,7 +18,7 @@ class MovController
 {
     public:
         void init(_axis axis);
-        void moveTo(signed short, unsigned short);
+        void moveTo(signed long, unsigned short);
         void setPosition(float);
         float getPosition();
         unsigned char isMoving();
@@ -41,7 +41,7 @@ class MovController
         _axis axis;
         _task task;
         float pos;
-        signed short steps;
+        signed long steps;
         unsigned char hasEndstop;
 };
 

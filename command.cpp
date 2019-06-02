@@ -33,21 +33,9 @@ void Command::start()
         }
         case SET_POS:
         {
-            if (this->pos.x_pos != 0.0F)
-            {
-                MovController::getMovController(X_AXIS)->setPosition(this->pos.x_pos);
-                this->pos.x_pos = 0.0F;
-            }
-            if (this->pos.y_pos != 0.0F)
-            {
-                MovController::getMovController(Y_AXIS)->setPosition(this->pos.y_pos);
-                this->pos.y_pos = 0.0F;
-            }
-            if (this->pos.z_pos != 0.0F)
-            {
-                MovController::getMovController(Z_AXIS)->setPosition(this->pos.z_pos);
-                this->pos.z_pos = 0.0F;
-            }
+            MovController::getMovController(X_AXIS)->setPosition(this->pos.x_pos);
+            MovController::getMovController(Y_AXIS)->setPosition(this->pos.y_pos);
+            MovController::getMovController(Z_AXIS)->setPosition(this->pos.z_pos);
             break;
         }
         case GRAB:
@@ -62,6 +50,12 @@ void Command::start()
             break;
     }
     this->ready = false;
+    this->started = true;
+}
+
+bool Command::hasStarted()
+{
+    return this->started;
 }
 
 bool Command::isDone()
@@ -99,6 +93,7 @@ _commandType Command::getCommandType()
 void Command::setCommandType(_commandType type)
 {
     this->type = type;
+    this->started = false;
 }
 
 _scheduledMove* Command::getMoveData()

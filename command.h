@@ -13,6 +13,7 @@ class Command
         Command();
         ~Command();
         void start();
+        bool hasStarted();
         bool isDone();
         bool isReady();
         void setReady();
@@ -23,6 +24,7 @@ class Command
 
     private:
         bool ready;
+        bool started;
         _commandType type;
         _scheduledMove mov;
         _pos pos;

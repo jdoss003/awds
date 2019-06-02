@@ -12,6 +12,7 @@
 #define DEFS_H_
 
 #define F_CPU 8000000UL
+//#define F_CPU 20000000UL
 
 #include <avr/interrupt.h>
 #include <stdlib.h>
@@ -44,7 +45,7 @@ void setSystemRunning(unsigned char isSerial);
 #include "usart1284.h"
 #include "task.h"
 
-#define MOTOR_DISABLE PA_7
+#define MOTOR_DISABLE PD_7
 
 #define X_MOTOR_DIR PC_0
 #define X_MOTOR_STEP PC_1
@@ -66,12 +67,12 @@ void setSystemRunning(unsigned char isSerial);
 #define Y_STEPS_MM 100
 #define Z_STEPS_MM 400
 
-#define X_HOME_OFFSET 36
-#define Y_HOME_OFFSET 7
-#define Z_HOME_OFFSET 0.8f
+#define X_HOME_OFFSET 0.0f
+#define Y_HOME_OFFSET 0.0f
+#define Z_HOME_OFFSET 0.0f
 
-#define X_MAX_POS 220
-#define Y_MAX_POS 220
-#define Z_MAX_POS 240
+#define X_MAX_POS 925
+#define Y_MAX_POS 670
+#define Z_MAX_POS 185
 
 #endif //DEFS_H_

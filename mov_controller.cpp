@@ -93,7 +93,7 @@ void MovController::init(_axis axis)
     this->axis = axis;
     this->pos = -237.0;
     this->steps = 0;
-    this->hasEndstop = (this->axis != Z_AXIS);
+    this->hasEndstop = true;
     Stepper::getStepper(this->axis)->init(this->axis);
 
     this->task.state = MOTOR_WAITING;
@@ -118,7 +118,7 @@ void MovController::init(_axis axis)
     addTask(&this->task);
 }
 
-void MovController::moveTo(signed short steps, unsigned short period)
+void MovController::moveTo(signed long steps, unsigned short period)
 {
     this->task.state = MOTOR_MOVING;
     this->steps = steps;
@@ -202,7 +202,7 @@ void MovController::onTick(_task *task)
             if (this->hitEndstop())
             {
                 this->task.state = MOTOR_MOVING;
-                this->steps = getHomeOffset(this->axis) * getStepsPerMM(this->axis);
+                this->steps = (long)getHomeOffset(this->axis) * getStepsPerMM(this->axis);
 				this->pos = -getHomeOffset(this->axis);
                 this->task.period = HOME_PERIOD1;
             }
@@ -216,15 +216,19 @@ void MovController::onTick(_task *task)
     {
         case MOTOR_MOVING:
             if (this->hasEndstop)
-				if (this->steps < 0 && this->hitEndstop())
-					{
-						char* s = "    ";
-						itoa(this->steps, s, 10);
-						//systemFailure("Invalid pos1");
-						systemFailure(s);
-					}
-				else if (this->steps > 0 && this->pos > getMaxPos(this->axis))
-					systemFailure("Invalid pos2");
+            {
+                if (this->steps < 0 && this->hitEndstop())
+                {
+                    char* s = "    ";
+                    itoa(this->steps, s, 10);
+                    //systemFailure("Invalid pos1");
+                    systemFailure(s);
+                }
+                else if (this->steps > 0 && this->pos > getMaxPos(this->axis))
+                {
+                    systemFailure("Invalid pos2");
+                }
+            }
             Stepper::getStepper(this->axis)->step(this->steps < 0);
             this->pos += (this->steps < 0 ? -1.0 / (float) getStepsPerMM(this->axis) : 1.0 / (float) getStepsPerMM(this->axis));
             this->steps += (this->steps < 0 ? 1 : -1);

@@ -15,11 +15,11 @@
 
 typedef struct ScheduledMove
 {
-    signed short x_steps;
+    signed long x_steps;
     unsigned short x_peroid;
-    signed short y_steps;
+    signed long y_steps;
     unsigned short y_peroid;
-    signed short z_steps;
+    signed long z_steps;
     unsigned short z_peroid;
 } _scheduledMove;
 

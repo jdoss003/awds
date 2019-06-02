@@ -61,7 +61,12 @@ void systemFailure(char* msg)
     system_state = SYS_FAILURE;
     MovController::stopAllMoves();
 
-    // TODO print error over UART
+    while (!USART_hasTransmittedLine(0));
+    USART_sendLine("Error: ", 0);
+    while (!USART_hasTransmittedLine(0));
+    USART_sendLine(msg, 0);
+    while (!USART_hasTransmittedLine(0));
+    USART_sendLine("\n", 0);
     while (1); // stay here until reset
 }
 
@@ -124,6 +129,8 @@ int main()
     USART_init(0);
 	USART_clearBuf(0);
     USART_autoReceive(1, 0);
+	
+	INITPIN(PB_0, OUTPUT, LOW);
 
     while (1) { mainLoop(); }
 }
