@@ -3,8 +3,8 @@ const mongoose = require('mongoose');
 const Package = mongoose.Schema({
     PACKAGE_ID: {
         type: String,
-        unique: true,
         required: true,
+        unique: true,
     },
     DATE_ENTERED: {
         type: Date,
@@ -15,7 +15,7 @@ const Package = mongoose.Schema({
         required: true,
     },
     GCODE: {
-        type: String,
+        type: Array,
         required: true,
     }
 });

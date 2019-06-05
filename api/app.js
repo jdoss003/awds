@@ -9,7 +9,7 @@ const packageRoutes = require('./api/routes/packages');
 const operationRoutes = require('./api/routes/operations');
 
 //Connect to database
-mongoose.connect('mongodb://localhost/awds', {useNewUrlParser: true})
+mongoose.connect('mongodb+srv://AWDS:AWDS@cluster-lkihf.mongodb.net/test?retryWrites=true&w=majority', {useNewUrlParser: true})
 
 //log requests using morgan
 app.use(morgan('dev'));
