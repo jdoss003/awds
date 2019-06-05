@@ -11,7 +11,7 @@ public class post extends AppCompatActivity {
 
     public static TextView resultTextView;
 
-    Button package_one_btn, package_two_btn, package_three_btn;
+    Button package_one_btn, package_two_btn, package_three_btn, custom_package_btn;
 
 
     @Override
@@ -42,6 +42,14 @@ public class post extends AppCompatActivity {
             @Override
             public void onClick(View view){
                 startActivity(new Intent(getApplicationContext(), PostingThree.class));
+            }
+        });
+
+        custom_package_btn = (Button) findViewById(R.id.custom_package_btn);
+        custom_package_btn.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view){
+                startActivity(new Intent(getApplicationContext(), PostingCustom.class));
             }
         });
     }

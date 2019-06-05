@@ -45,8 +45,9 @@ public class get extends AppCompatActivity {
         mResult = (TextView) findViewById(R.id.tv_result);
 
         //EXECUTING GET REQUEST
-        new GetDataTask().execute("http:192.168.1.149:1000/api/status"); //home
+        //new GetDataTask().execute("http:192.168.1.149:1000/api/status"); //home
         //new GetDataTask().execute("http:192.168.43.51:1000/api/status"); //hotspot
+        new GetDataTask().execute("http:192.168.43.51:1000/packages"); //hotspot Dereks api
     }
 
     class GetDataTask extends AsyncTask<String, Void, String> {

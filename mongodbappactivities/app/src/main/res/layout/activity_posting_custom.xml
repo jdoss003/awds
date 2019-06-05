@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/neutral"
+    tools:context="com.example.mongodbappactivities.post">
+
+    <EditText
+    android:id="@+id/edittext"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:hint="Enter Package ID" />
+
+    <EditText
+        android:id="@+id/edittext2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/edittext"
+        android:hint="Enter Date Entered" />
+
+    <EditText
+        android:id="@+id/edittext3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/edittext2"
+        android:hint="Enter Details" />
+
+    <EditText
+        android:id="@+id/edittext4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/edittext3"
+        android:hint="Enter GCODE" />
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/edittext4"
+        android:text="Submit"
+        android:textSize="20sp"
+        android:id="@+id/custom_btn"
+
+
+        />
+
+</RelativeLayout>

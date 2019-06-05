@@ -46,9 +46,10 @@ public class PostingThree extends AppCompatActivity {
         mResult = (TextView) findViewById(R.id.tv_result);
 
         //EXECUTING POST REQUESTs
-        new PostDataTask().execute("http:192.168.1.149:1000/api/status"); //home
+        //new PostDataTask().execute("http:192.168.1.149:1000/api/status"); //home
         //new PostDataTask().execute("http:169.235.178.211:1000/api/status");//school
         //new PostDataTask().execute("http:192.168.43.51:1000/api/status"); //hotspot
+        new PostDataTask().execute("http:192.168.43.51:1000/packages"); //hotspot Dereks api
     }
 
     class PostDataTask extends AsyncTask<String, Void, String> {
@@ -96,7 +97,8 @@ public class PostingThree extends AppCompatActivity {
                 dataToSend.put("lastname", "Tomato");
                 dataToSend.put("packnum", 2019);
                 dataToSend.put("storagelocation", "92507,92507");
-                dataToSend.put("deliverylocation", "92507,92507");
+                dataToSend.put("deliverylocation", "push gcode string here");
+                //dataToSend.put("gcode", "command");
 
                 //init and config request to connect to server db
                 URL url = new URL(urlPath);

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/neutral"
+    tools:context="com.example.mongodbappactivities.post">
+
+
+    <TextView
+        android:id="@+id/filler"
+        android:layout_width="match_parent"
+        android:layout_height="201dp"
+        android:gravity="center"
+        android:textColor="@color/colorAccent"
+        android:textSize="30sp" />
+
+    <TextView
+        android:id="@+id/tvr"
+        android:layout_width="400dp"
+        android:layout_height="103dp"
+        android:layout_below="@+id/filler"
+        android:gravity="center"
+        android:text="PACKAGE_ID"
+        android:textColor="@color/colorAccent"
+        android:textSize="30sp" />
+
+    <TextView
+        android:id="@+id/tvr2"
+        android:layout_width="match_parent"
+        android:layout_height="85dp"
+        android:layout_below="@+id/tvr"
+        android:gravity="center"
+        android:text="DATE_ENTERED"
+        android:textColor="@color/colorAccent"
+        android:textSize="30sp" />
+
+    <TextView
+        android:id="@+id/tvr3"
+        android:layout_width="match_parent"
+        android:layout_height="76dp"
+        android:layout_below="@+id/tvr2"
+        android:gravity="center"
+        android:text="DETAILS"
+        android:textColor="@color/colorAccent"
+        android:textSize="30sp" />
+
+    <TextView
+        android:id="@+id/tvr4"
+        android:layout_width="match_parent"
+        android:layout_height="94dp"
+        android:layout_below="@+id/tvr3"
+        android:gravity="center"
+        android:text="GCODE"
+        android:textColor="@color/colorAccent"
+        android:textSize="30sp" />
+
+</RelativeLayout>
