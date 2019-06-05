@@ -29,32 +29,13 @@ void operator delete(void* obj)
 	free(obj);
 }
 
-void waitingLoop(unsigned char delay)
-{
-    switch (system_state)
-    {
-        case SYS_WAITING:
-        case SYS_RUNNING:
-            break;
-        default:
-            systemFailure("Bad system state");
-            break;
-    }
-}
-
 _system_state getSysState()
 {
     return system_state;
 }
 
-void setSystemRunning()
-{
-    system_state = SYS_RUNNING;
-}
-
 void systemFailure(char* msg)
 {
-    cli();
     TimerOffA();
     TimerOffB();
 
@@ -67,13 +48,14 @@ void systemFailure(char* msg)
     USART_sendLine(msg, 0);
     while (!USART_hasTransmittedLine(0));
     USART_sendLine("\n", 0);
+    while (!USART_hasTransmittedLine(0));
+
+    cli();
     while (1); // stay here until reset
 }
 
 void mainLoop()
-{
-	static unsigned char t = 0;
-	
+{	
     switch (system_state)
     {
         case SYS_START:
@@ -86,6 +68,8 @@ void mainLoop()
                 nextLine = USART_getLine(0);
                 if (command.parseAscii(nextLine, 1))
                 {
+					//while (!USART_hasTransmittedLine(0));
+					//USART_sendLine("ok\n", 0);
                     proccess_command(command);
                 }
                 else
@@ -99,7 +83,7 @@ void mainLoop()
             break;
         }
         default:
-            systemFailure("Bad system state");
+            systemFailure("Bad system state2");
             break;
     }
 }
@@ -121,16 +105,16 @@ int main()
 
     INITPIN(MOTOR_DISABLE, OUTPUT, LOW);
 
+    grap_init();
+
     TimerSetA(TICK_PERIOD_A);
     TimerOnA();
-    //TimerSetB(TICK_PERIOD_B);
-    //TimerOnB();
+    TimerSetB(TICK_PERIOD_B);
+    TimerOnB();
 
     USART_init(0);
 	USART_clearBuf(0);
     USART_autoReceive(1, 0);
 	
-	INITPIN(PB_0, OUTPUT, LOW);
-
     while (1) { mainLoop(); }
 }

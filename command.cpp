@@ -1,6 +1,7 @@
 
 
 #include "command.h"
+#include "grappler.h"
 #include "mov_controller.h"
 
 Command::Command()
@@ -40,11 +41,13 @@ void Command::start()
         }
         case GRAB:
         {
-            break; // TODO
+			grap_close();
+            break;
         }
         case DROP:
         {
-            break; // TODO
+			grap_open();
+            break;
         }
         default:
             break;
@@ -65,9 +68,9 @@ bool Command::isDone()
         case MOVE:
             return !MovController::areAnyMotorsMoving();
         case GRAB:
-            return false; // TODO
+            return grap_isClosed();
         case DROP:
-            return false; // TODO
+            return grap_isOpen();
         case SET_POS:
             return true;
         default:

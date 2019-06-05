@@ -245,7 +245,7 @@ void MovController::onTick(_task *task)
 				--this->steps;
             break;
         default:
-            systemFailure("Motor State");
+            systemFailure("Motor State2");
             break;
     }
 }

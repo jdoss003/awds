@@ -104,6 +104,6 @@ bool GCode::parseAscii(char *line, bool fromSerial)
     if (hasN() && checksum == 0)
         setFormatError();
 
-    return !hasFormatError() && (params & 0x0003) && (G < 256);
+    return !hasFormatError() && (params & 0x0002) && (G < 256);
 }
 

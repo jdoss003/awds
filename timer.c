@@ -110,7 +110,7 @@ ISR(TIMER0_COMPA_vect)
     _avr_timer_b_cntcurr--;                 // Count down to 0 rather than up to TOP
     if (_avr_timer_b_cntcurr == 0)
     {                                       // results in a more efficient compare
-        _avr_timer_b_cntcurr = _avr_timer_b_M;
-        //TIMER_B_ISR();                      // Call the ISR that the user uses
+        TIMER_B_ISR();                      // Call the ISR that the user uses
+		_avr_timer_b_cntcurr = _avr_timer_b_M;
     }
 }

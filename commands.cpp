@@ -163,7 +163,6 @@ void do_g_command(GCode cmd)
             if (currentBlocking.isDone() || currentBlocking.getCommandType() == EMPTY)
             {
                 currentBlocking.setCommandType(GRAB);
-                // TODO
                 currentBlocking.setReady();
                 while (!USART_hasTransmittedLine(0));
                 USART_sendLine(OK, 0);
@@ -178,7 +177,6 @@ void do_g_command(GCode cmd)
             if (currentBlocking.isDone() || currentBlocking.getCommandType() == EMPTY)
             {
                 currentBlocking.setCommandType(DROP);
-                // TODO
                 currentBlocking.setReady();
                 while (!USART_hasTransmittedLine(0));
                 USART_sendLine(OK, 0);

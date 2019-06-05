@@ -25,10 +25,8 @@ extern "C" {
 typedef enum axis { X_AXIS, Y_AXIS, Z_AXIS } _axis;
 typedef enum system_states { SYS_START, SYS_WAITING, SYS_RUNNING, SYS_FAILURE } _system_state;
 
-void waitingLoop(unsigned char delay);
 void systemFailure(char* msg);
 _system_state getSysState();
-void setSystemRunning(unsigned char isSerial);
 
 #ifdef __cplusplus
 }
@@ -36,14 +34,15 @@ void setSystemRunning(unsigned char isSerial);
 
 // in milliseconds
 #define TICK_PERIOD_A 1
-//#define TICK_PERIOD_B 2000
+#define TICK_PERIOD_B 1
 #define TIMER_A_ISR tickTasks
-//#define TIMER_B_ISR updateDisplay
+#define TIMER_B_ISR grap_tick
 
 #include "pin_io.h"
 #include "timer.h"
 #include "usart1284.h"
 #include "task.h"
+#include "grappler.h"
 
 #define MOTOR_DISABLE PD_7
 
@@ -67,12 +66,12 @@ void setSystemRunning(unsigned char isSerial);
 #define Y_STEPS_MM 100
 #define Z_STEPS_MM 400
 
-#define X_HOME_OFFSET 0.0f
-#define Y_HOME_OFFSET 0.0f
-#define Z_HOME_OFFSET 0.0f
+#define X_HOME_OFFSET 1
+#define Y_HOME_OFFSET 1
+#define Z_HOME_OFFSET 1
 
 #define X_MAX_POS 925
 #define Y_MAX_POS 670
-#define Z_MAX_POS 185
+#define Z_MAX_POS 145
 
 #endif //DEFS_H_
