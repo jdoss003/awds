@@ -14,8 +14,8 @@
 #endif
 
 #define BAUD_PRESCALE(br) (((F_CPU / (br * 16UL))))
-#define MAX_BUF 80
-#define MAX_BUFS 5
+#define MAX_BUF 300
+#define MAX_BUFS 4
 
 unsigned char readBuf0[MAX_BUFS][MAX_BUF];
 unsigned char index0[MAX_BUFS];

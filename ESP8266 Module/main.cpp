@@ -17,6 +17,7 @@
 #include <stdlib.h>			/* Include standard library */
 #include "usart1284.h"		/* Include USART header file */
 #include "io.h"				/* Include LCD functions */
+#include "json_utils.h"		/* Include JSON parser functs */
 
 //USART Values
 #define ESP8266_Baud 115200
@@ -37,24 +38,6 @@
 #define BOTH_STATION_AND_ACCESPOINT	3
 
 // Define Required fields shown below
-#define DOMAIN				"api.thingspeak.com"
-#define PORT				"80"
-#define API_WRITE_KEY		"ASW3O7IL6AO9U141"
-#define CHANNEL_ID			"780705"
-#define SSID				"TestWIFI"
-#define PASSWORD			"AWDScs179"
-
-#define DEFAULT_BUFFER_SIZE		160
-#define DEFAULT_TIMEOUT			50000
-
-enum ESP8266_RESPONSE_STATUS{
-	ESP8266_RESPONSE_WAITING,
-	ESP8266_RESPONSE_FINISHED,
-	ESP8266_RESPONSE_TIMEOUT,
-	ESP8266_RESPONSE_BUFFER_FULL,
-	ESP8266_RESPONSE_STARTING,
-	ESP8266_RESPONSE_ERROR
-};
 
 enum ESP8266_CONNECT_STATUS {
 	ESP8266_CONNECTED_TO_AP,
@@ -64,26 +47,20 @@ enum ESP8266_CONNECT_STATUS {
 	ESP8266_CONNECT_UNKNOWN_ERROR
 };
 
-enum ESP8266_JOINAP_STATUS {
-	ESP8266_WIFI_CONNECTED,
-	ESP8266_CONNECTION_TIMEOUT,
-	ESP8266_WRONG_PASSWORD,
-	ESP8266_NOT_FOUND_TARGET_AP,
-	ESP8266_CONNECTION_FAILED,
-	ESP8266_JOIN_UNKNOWN_ERROR
-};
 
 //Receive line sent from WIFI that was automatically received through USART.
 bool Default_ReadResponse(char* expectedResponse)
 {
+	PORTA = 0x01;
 	//Receive echo
 	while(!USART_hasLine(USART_Channel)){}
 	USART_getLine(USART_Channel);
 	
+	PORTA = 0x01;
 	//Receive crlf
 	while(!USART_hasLine(USART_Channel)){}
 	USART_getLine(USART_Channel);
-	
+	PORTA - 0x02;
 	//Receive OK
 	while(!USART_hasLine(USART_Channel)){}
 	char* ok = USART_getLine(USART_Channel);
@@ -131,33 +108,62 @@ char* Connected_ReadResponse(char* expectedResponse)
 }
 
 //Receive line sent from WIFI that was automatically received through USART. Catches echo.
-char* JoinAP_ReadResponse(char* connected, char* gotIP)
+bool JoinAP_ReadResponse(char* connected, char* gotIP)
 {
 	//Receive crlf
 	while(!USART_hasLine(USART_Channel)){}
 	USART_getLine(USART_Channel);
 	
-	//Receive WIFI CONNECTED
 	while(!USART_hasLine(USART_Channel)){}
-	char* status = USART_getLine(USART_Channel);
+	char* status1 = USART_getLine(USART_Channel);
 	
-	//Receive WIFI GOT IP
-	while(!USART_hasLine(USART_Channel)){}
-	char* ip = USART_getLine(USART_Channel);
-	
-	//Receive crlf
-	while(!USART_hasLine(USART_Channel)){}
-	USART_getLine(USART_Channel);
-	
-	unsigned char* dispstr = (unsigned char*) status;
-	LCD_DisplayString(1, dispstr);
-	
-	//Check if received expected response
-	if(strstr(status, connected) && strstr(ip, gotIP))
-	{
-		return status;
+	if(strstr(status1, "DISCONNECT")){
+		//Receive WIFI CONNECTED
+		while(!USART_hasLine(USART_Channel)){}
+		char* status2 = USART_getLine(USART_Channel);
+		
+		//Receive WIFI GOT IP
+		while(!USART_hasLine(USART_Channel)){}
+		char* ip = USART_getLine(USART_Channel);
+		
+		//Receive crlf
+		while(!USART_hasLine(USART_Channel)){}
+		USART_getLine(USART_Channel);
+		
+		unsigned char* dispstr1 = (unsigned char*) status2;
+		LCD_DisplayString(1, dispstr1);
+		
+		//Check if received expected response
+		if(strstr(status2, connected) && strstr(ip, gotIP))
+		{
+			return true;
+		}
+		return false;
 	}
-	return status;
+	else if(strstr(status1, "ERROR")){
+		return false;
+	}
+	else{
+		PORTA = 0x01;
+		//Receive WIFI GOT IP
+		while(!USART_hasLine(USART_Channel)){}
+		char* ip = USART_getLine(USART_Channel);
+			
+		PORTA = 0x02;
+		//Receive crlf
+		while(!USART_hasLine(USART_Channel)){}
+		USART_getLine(USART_Channel);
+		
+		unsigned char* dispstr2 = (unsigned char*) status1;
+		LCD_DisplayString(1, dispstr2);
+		
+		//Check if received expected response
+		if(strstr(status1, connected) && strstr(ip, gotIP))
+		{
+			return true;
+		}
+		return false;
+	}
 }
 
 //Receive line sent from WIFI that was automatically received through USART. Catches echo.
@@ -190,41 +196,28 @@ bool Start_ReadResponse(char* expectedResponse)
 	return false;
 }
 
-char* JSON_ReadResponse(char* expectedResponse)
+char* JSON_ReadResponse()
 {
 	//Receive received notice
 	while(!USART_hasLine(USART_Channel)){}
-	char* rec = USART_getLine(USART_Channel);
-	unsigned char* dispstr1 = (unsigned char*) rec;
-	PORTA =0x01;
+	USART_getLine(USART_Channel);
 	
 	//Receive SEND OK
 	while(!USART_hasLine(USART_Channel)){}
-	char* sok = USART_getLine(USART_Channel);
-	unsigned char* dispstr2 = (unsigned char*) sok;
-	PORTA =0x02;
+	USART_getLine(USART_Channel);
 	
 	//Receive JSON*/
 	while(!USART_hasLine(USART_Channel)){}
-	char* json1 = USART_getLine(USART_Channel);
-	unsigned char* dispstr3 = (unsigned char*) json1;
-	PORTA = 0x04;
-	LCD_DisplayString(1, dispstr3);
+	char* json = USART_getLine(USART_Channel);
 	
-	//Receive JSON
-	uint16_t count = 0;
-	while(!USART_hasLine(USART_Channel)){
-		if(count > 60000){
-			return json1;
-		}
-		count = count + 1;
+	
+	while(json && *json != '['){
+		while(!USART_hasLine(USART_Channel)){}
+		json = USART_getLine(USART_Channel);
 	}
-	char* json2 = USART_getLine(USART_Channel);
-	unsigned char* dispstr4 = (unsigned char*) json2;
-	PORTA = 0x08;
 
 	//Check if received expected response
-	return json2;
+	return json;
 }
 
 //Send AT command to ESP8622 WIFI Module.
@@ -241,7 +234,7 @@ void SendAT(char* atCommand)
 bool ESP8266_Begin()
 {
 	char* command = "AT\r\n";
-	char* response = "OK";
+	char* response = "K";
 	SendAT(command);
 	return Default_ReadResponse(response);
 }
@@ -250,7 +243,7 @@ bool ESP8266_Begin()
 bool ESP8266_WIFIMode()
 {
 	char* command = "AT+CWMODE_CUR=3\r\n";//Set up WIFI module as both Access point and STA
-	char* response = "OK";
+	char* response = "K";
 	SendAT(command);
 	return Default_ReadResponse(response);
 }
@@ -259,7 +252,7 @@ bool ESP8266_WIFIMode()
 bool ESP8266_ConnectionMode()
 {
 	char* command = "AT+CIPMUX=0\r\n";//Set up WIFI module for singular connection
-	char* response = "OK";
+	char* response = "K";
 	SendAT(command);
 	return Default_ReadResponse(response);
 }
@@ -268,7 +261,7 @@ bool ESP8266_ConnectionMode()
 bool ESP8266_ApplicationMode()
 {
 	char* command = "AT+CIPMODE=0\r\n";//Set up WIFI module for singular connection
-	char* response = "OK";
+	char* response = "K";
 	SendAT(command);
 	return Default_ReadResponse(response);
 }
@@ -276,7 +269,7 @@ bool ESP8266_ApplicationMode()
 uint8_t ESP8266_connected()
 {
 	char* command = "AT+CIPSTATUS\r\n";//Set up WIFI module for singular connection
-	char* response = "OK";
+	char* response = "K";
 	SendAT(command);
 	char* status = Connected_ReadResponse(response);
 	
@@ -292,35 +285,19 @@ uint8_t ESP8266_connected()
 		return ESP8266_CONNECT_UNKNOWN_ERROR;
 }
 
-uint8_t ESP8266_JoinAccessPoint()
+bool ESP8266_JoinAccessPoint()
 {
-	char* command = "AT+CWJAP_CUR=\"TestWIFI\",\"AWDScs179\"\r\n";
+	char* command = "AT+CWJAP_CUR=\"AWDS\",\"automaticwarehousedeliverysystem\"\r\n";
 	char* response1 = "CONNECTED";
 	char* response2 = "GOT IP";
 	SendAT(command);
-	char* status = JoinAP_ReadResponse(response1, response2);
-	
-	if(strstr(status, "CONNECTED"))
-		return ESP8266_WIFI_CONNECTED;
-	else
-	{
-		if(strstr(status, "1"))
-			return ESP8266_CONNECTION_TIMEOUT;
-		else if(strstr(status, "2"))
-			return ESP8266_WRONG_PASSWORD;
-		else if(strstr(status, "3"))
-			return ESP8266_NOT_FOUND_TARGET_AP;
-		else if(strstr(status, "+CWJAP:4"))
-			return ESP8266_CONNECTION_FAILED;
-		else
-			return ESP8266_JOIN_UNKNOWN_ERROR;
-	}
+	return JoinAP_ReadResponse(response1, response2);
 }
 
-bool ESP8266_Start(uint8_t _ConnectionNumber, char* Domain, char* Port)
+bool ESP8266_Start()
 {
-	char* command = "AT+CIPSTART=\"TCP\",\"api.thingspeak.com\",80\r\n";
-	char* response = "OK";
+	char* command = "AT+CIPSTART=\"TCP\",\"192.168.43.51\",1000\r\n";
+	char* response = "K";
 	SendAT(command);
 	return Start_ReadResponse(response);
 }
@@ -331,15 +308,14 @@ char* ESP8266_Send(char* Data)
 	memset(command, 0, 20);
 	sprintf(command, "AT+CIPSEND=%d\r\n", (strlen(Data)));
 	command[19] = 0;
-	char* response1 = "OK";
+	char* response1 = "K";
 	SendAT(command);
 	
 	if(Default_ReadResponse(response1))
 	{
 		_delay_ms(10);
-		char* response2 = "SEND OK";
 		SendAT(Data);
-		return JSON_ReadResponse(response2);
+		return JSON_ReadResponse();
 	}
 	else
 	{
@@ -356,23 +332,23 @@ bool WIFI_init(){
 			return false;
 		}
 		
-		_delay_ms(10);
+		_delay_ms(100);
 		
 		if (!ESP8266_ConnectionMode())
 		{
 			return false;
 		}
 		
-		_delay_ms(10);
+		_delay_ms(100);
 		
 		if (!ESP8266_ApplicationMode())
 		{
 			return false;
 		}
 		
-		_delay_ms(10);
+		_delay_ms(100);
 		
-		if (!ESP8266_JoinAccessPoint() == ESP8266_WIFI_CONNECTED)
+		if (!ESP8266_JoinAccessPoint())
 		{
 			return false;
 		}
@@ -380,15 +356,15 @@ bool WIFI_init(){
 }
 
 char* getOperation(){
-	char* httpReq = "GET /channels/780705/fields/1.json\r\n\r\n";
+	char* httpReq = "GET /packages/001\r\n\r\n";
 	uint8_t val = ESP8266_connected();
-	_delay_ms(10);
+	_delay_ms(100);
 	
 	if(val == ESP8266_CONNECTED_TO_AP)
 	{
-		if(ESP8266_Start(0, DOMAIN, PORT))
+		if(ESP8266_Start())
 		{
-			_delay_ms(10);
+			_delay_ms(100);
 			char* ans = ESP8266_Send(httpReq);
 			return ans;
 		}
@@ -404,9 +380,9 @@ char* getOperation(){
 	}
 	else if(val == ESP8266_TRANSMISSION_DISCONNECTED)
 	{
-		if(ESP8266_Start(0, DOMAIN, PORT))
+		if(ESP8266_Start())
 		{
-			_delay_ms(10);
+			_delay_ms(100);
 			char* ans = ESP8266_Send(httpReq);
 			return ans;
 		}
@@ -417,10 +393,10 @@ char* getOperation(){
 	}
 	else if(val == ESP8266_NOT_CONNECTED_TO_AP)
 	{
-		if (ESP8266_JoinAccessPoint() == ESP8266_WIFI_CONNECTED)
+		if (ESP8266_JoinAccessPoint())
 		{
 			_delay_ms(10);
-			if(ESP8266_Start(0, DOMAIN, PORT))
+			if(ESP8266_Start())
 			{
 				_delay_ms(10);
 				char* ans = ESP8266_Send(httpReq);
@@ -455,15 +431,31 @@ int main(void)
 	//INIT WIFI
 	if(!WIFI_init())
 	{
-		unsigned char* op = (unsigned char*) "JA FAILED";
-		LCD_DisplayString(1, op);
+		PORTA = 0x0C;
 	}
 	else
 	{
 		char* operation = getOperation();
-		unsigned char* op1 = (unsigned char*) operation;
-		LCD_DisplayString(1, op1);
-		PORTA = 0x0F;
+		char* op2 = operation;
+		
+		while(*op2++ != ']'){
+			
+		}
+		*(op2-1) = 0;
+		
+		char* key = "GCODE";
+		 char* res = getValueFromKey(operation+1, key);
+		 
+		 if(res == 0){
+			 unsigned char* op = (unsigned char*) "JSON PARSE FAILED";
+			 LCD_DisplayString(1, op);
+		 }
+		 else{
+			 PORTA = 0x0F;
+			 unsigned char* displayres = (unsigned char*) op2;
+			 LCD_DisplayString(1, displayres);
+			 free(res);
+		 }
 	}
 	while(1){}
 }
