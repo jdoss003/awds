@@ -1,5 +1,5 @@
 # Automated Warehouse Delivery System (AWDS)
-An automated package storage and retrieval system for warehouses.
+An automated package storage and retrieval system for warehouses. Check out [this video](https://youtu.be/MivAaYYUbdc) to see it in action.
 
 This project is broken up into three main parts.
  - AWDS frame
